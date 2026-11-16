@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>I Am Sorry</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #fff0f5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 20px;
+      touch-action: manipulation;
+    }
+    #questionBox {
+      max-width: 90%;
+      z-index: 2;
+    }
+    .emoji-header {
+      font-size: clamp(48px, 12vw, 64px);
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(22px, 5.5vw, 34px);
+      color: #333333;
+      line-height: 1.4;
+      margin-bottom: 30px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+    button {
+      padding: 14px 32px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+    #acceptBtn {
+      background-color: #28a745;
+      color: #ffffff;
+      transition: transform 0.2s ease;
+    }
+    #acceptBtn:active {
+      transform: scale(0.95);
+    }
+    #rejectBtn {
+      background-color: #dc3545;
+      color: #ffffff;
+      transition: left 0.18s ease-out, top 0.18s ease-out;
+      z-index: 10;
+    }
+    #successBox {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      max-width: 90%;
+      z-index: 2;
+      animation: popIn 0.6s ease-out forwards;
+    }
+    .tulip-bouquet {
+      font-size: clamp(56px, 15vw, 80px);
+      margin-bottom: 16px;
+      animation: sway 2.5s ease-in-out infinite;
+    }
+    .love-text {
+      font-size: clamp(24px, 6.5vw, 38px);
+      font-weight: bold;
+      color: #d63384;
+      line-height: 1.4;
+    }
+    .falling-tulip {
+      position: fixed;
+      top: -50px;
+      font-size: 28px;
+      pointer-events: none;
+      z-index: 1;
+      animation: fall linear forwards;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes sway {
+      0%, 100% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="questionBox">
+    <div class="emoji-header">🥺😢</div>
+    <h1>Please accept my apology.<br>I am sorry.</h1>
+    <div class="btn-group">
+      <button id="acceptBtn">Accept</button>
+      <button id="rejectBtn">Reject</button>
+    </div>
+  </div>
+
+  <div id="successBox">
+    <div class="tulip-bouquet">🌷🌷🌷</div>
+    <div class="love-text">I am sorry, I love youuuuu my dear 😊☺️🌷</div>
+  </div>
+
+  <script>
+    const acceptBtn = document.getElementById('acceptBtn');
+    const rejectBtn = document.getElementById('rejectBtn');
+    const questionBox = document.getElementById('questionBox');
+    const successBox = document.getElementById('successBox');
+
+    function dodgeButton(e) {
+      if (e) e.preventDefault();
+
+      rejectBtn.style.position = 'fixed';
+
+      const padding = 24;
+      const maxX = window.innerWidth - rejectBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - rejectBtn.offsetHeight - padding;
+
+      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+      rejectBtn.style.left = randomX + 'px';
+      rejectBtn.style.top = randomY + 'px';
+    }
+
+    rejectBtn.addEventListener('mouseover', dodgeButton);
+    rejectBtn.addEventListener('touchstart', dodgeButton, { passive: false });
+    rejectBtn.addEventListener('click', dodgeButton);
+
+    function spawnTulip() {
+      const tulip = document.createElement('div');
+      tulip.classList.add('falling-tulip');
+      tulip.textContent = '🌷';
+      tulip.style.left = Math.random() * 100 + 'vw';
+      tulip.style.animationDuration = (Math.random() * 2.5 + 2.5) + 's';
+      document.body.appendChild(tulip);
+
+      setTimeout(() => {
+        tulip.remove();
+      }, 5000);
+    }
+
+    acceptBtn.addEventListener('click', () => {
+      questionBox.style.display = 'none';
+      rejectBtn.style.display = 'none';
+      successBox.style.display = 'flex';
+
+      // Create falling tulips celebration
+      for (let i = 0; i < 18; i++) {
+        setTimeout(spawnTulip, i * 180);
+      }
+      setInterval(spawnTulip, 500);
+    });
+  </script>
+
+</body>
+</html>
